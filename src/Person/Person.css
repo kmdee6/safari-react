@@ -1,0 +1,13 @@
+.Person {
+    width: 40%;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px #ccc;
+    padding: 20px;
+}
+
+@media (max-width: 500px) {
+    .Person {
+        background-color: lightcyan;
+    }
+}
