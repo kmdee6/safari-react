@@ -1,0 +1,7 @@
+p partey {
+    border: 1px dot-dash black;
+    background-color: lightgreen;
+    padding: 15px;
+    width: 60%;
+    margin: 10px auto;
+}

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import classes from './App.css';
 import Radium, {StyleRoot} from 'radium';
-import Person from './Person/Person';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
 
@@ -23,29 +24,17 @@ class App extends Component {
             persons = (
                 <StyleRoot>
                     <div>
-                        {this.state.persons.map((person, index) => {
-                                return (
-                                    <div key={person.id}>
-                                        <Person
-                                            name={person.name}
-                                            click={() => this.showDetailsHandler(person.id)}
-                                            age={person.age}
-                                            changed={(event) => this.nameChangeHandler(event, person.id)}
-                                        />
-                                        {person.partyName ? <p onClick={() => this.removePartyName(index)}
-                                                               className={classes.partey}>{person.partyName} is a party
-                                            going freak!</p> : null}
-                                    </div>
-                                );
-
-                            }
-                        )}
+                        <Persons
+                            persons={this.state.persons}
+                            clicked={this.deletePersonHandler}
+                            changed={this.nameChangeHandler}
+                            removePartyName={this.removePartyName}
+                        />
                     </div>
                 </StyleRoot>
             );
 
             buttonClass = classes.Red;
-
         }
 
         const assignedClasses = [];
@@ -59,8 +48,11 @@ class App extends Component {
 
         return (
             <div className={classes.App}>
-                <p className={assignedClasses.join(' ')}>This is the text.</p>
-                <button className={buttonClass} onClick={this.togglePersonsHandler}>Toggle Persons</button>
+                <Cockpit
+                    classes={assignedClasses}
+                    buttonClass={buttonClass}
+                    clicked={this.togglePersonsHandler}
+                />
                 {persons}
             </div>
         )
