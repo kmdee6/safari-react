@@ -18,43 +18,30 @@ class App extends Component {
     render() {
 
         let persons = null;
-        let buttonClass = null;
         if (this.state.showPersons) {
 
             persons = (
-                <StyleRoot>
-                    <div>
-                        <Persons
-                            persons={this.state.persons}
-                            clicked={this.deletePersonHandler}
-                            changed={this.nameChangeHandler}
-                            removePartyName={this.removePartyName}
-                        />
-                    </div>
-                </StyleRoot>
+                <Persons
+                    persons={this.state.persons}
+                    clicked={this.showDetailsHandler}
+                    changed={this.nameChangeHandler}
+                    removePartyName={this.removePartyName}
+                />
             );
 
-            buttonClass = classes.Red;
-        }
-
-        const assignedClasses = [];
-
-        if (this.state.persons.length <= 2) {
-            assignedClasses.push(classes.red);
-        }
-        if (this.state.persons.length <= 1) {
-            assignedClasses.push(classes.bold);
         }
 
         return (
-            <div className={classes.App}>
-                <Cockpit
-                    classes={assignedClasses}
-                    buttonClass={buttonClass}
-                    clicked={this.togglePersonsHandler}
-                />
-                {persons}
-            </div>
+            <StyleRoot>
+                <div className={classes.App}>
+                    <Cockpit
+                        showPersons={this.state.showPersons}
+                        persons={this.state.persons}
+                        clicked={this.togglePersonsHandler}
+                    />
+                    {persons}
+                </div>
+            </StyleRoot>
         )
     };
 
