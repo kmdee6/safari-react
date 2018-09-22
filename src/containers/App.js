@@ -1,49 +1,45 @@
 import React, {Component} from 'react';
 import classes from './App.css';
-import Radium, {StyleRoot} from 'radium';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import withClass from '../hoc/withClass';
+import Wrapr from "../hoc/Wrapr";
+
+export const AuthContext = React.createContext(false);
 
 class App extends Component {
 
-    state = {
-        persons: [
-            {id: "name1", name: "Dinesh", age: 28, partyName: ''},
-            {id: "name2", name: "Direwolf", age: 128, partyName: ''},
-            {id: "name3", name: "Razor", age: 20, partyName: ''}
-        ],
-        showPersons: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            persons: [
+                {id: "name1", name: "Dinesh", age: 28, partyName: ''},
+                {id: "name2", name: "Direwolf", age: 128, partyName: ''},
+                {id: "name3", name: "Razor", age: 20, partyName: ''}
+            ],
+            showPersons: false,
+            toggleCount: 0,
+            authenticated: false
+        };
 
-    render() {
+    }
 
-        let persons = null;
-        if (this.state.showPersons) {
+    componentDidUpdate() {
+        console.log('[App.js] componentDidUpdate');
+    }
 
-            persons = (
-                <Persons
-                    persons={this.state.persons}
-                    clicked={this.showDetailsHandler}
-                    changed={this.nameChangeHandler}
-                    removePartyName={this.removePartyName}
-                />
-            );
+    componentDidMount() {
+        console.log('[App.js] componentDidMount');
+    }
 
-        }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.log('[App.js] getDeriveStateFromProps', prevState, nextProps);
+        return prevState;
+    }
 
-        return (
-            <StyleRoot>
-                <div className={classes.App}>
-                    <Cockpit
-                        showPersons={this.state.showPersons}
-                        persons={this.state.persons}
-                        clicked={this.togglePersonsHandler}
-                    />
-                    {persons}
-                </div>
-            </StyleRoot>
-        )
-    };
+    getSnapshotBeforeUpdate() {
+        console.log('[App.js] getSnapshotBeforeUpdate');
+    }
 
     nameChangeHandler = (event, id) => {
 
@@ -60,37 +56,58 @@ class App extends Component {
         this.setState({
             persons: personsCopy
         });
-    }
+    };
 
     deletePersonHandler = (personIndex) => {
         const personsCopy = [...this.state.persons];
         personsCopy.splice(personIndex, 1);
         this.setState({persons: personsCopy});
-    }
+    };
 
     togglePersonsHandler = () => {
-        const togglePersons = this.state.showPersons;
-        this.setState({showPersons: !togglePersons});
-    }
 
-    removePartyName = (index) => {
-        const personsCopy = [...this.state.persons];
-        personsCopy[index].partyName = null;
-        this.setState({persons: personsCopy});
-    }
+        this.setState((prevState, props) => {
+            return {
+                showPersons: !prevState.showPersons,
+                toggleCount: prevState.toggleCount + 1
+            }
+        });
 
-    showDetailsHandler = (id) => {
-        const personsCopy = [...this.state.persons];
-        const personIndex = this.state.persons.findIndex(personItem => {
-            return personItem.id === id;
-        });
-        const person = personsCopy[personIndex];
-        person.partyName = person.name + ' PartyGoer'
-        personsCopy[personIndex] = person;
-        this.setState({
-            persons: personsCopy
-        });
-    }
+        console.log(this.state.toggleCount);
+    };
+
+    loginHandler = () => {
+        this.setState({authenticated: true})
+    };
+
+    render() {
+        console.log('[App.js] render()');
+        let persons = null;
+        if (this.state.showPersons) {
+
+            persons = (
+                <Persons
+                    persons={this.state.persons}
+                    clicked={this.deletePersonHandler}
+                    changed={this.nameChangeHandler}
+                />
+            );
+
+        }
+
+        return (
+            <Wrapr>
+                <Cockpit
+                    showPersons={this.state.showPersons}
+                    persons={this.state.persons}
+                    login={this.loginHandler}
+                    clicked={this.togglePersonsHandler}
+                />
+                <AuthContext.Provider value={this.state.authenticated}>{persons}</AuthContext.Provider>
+            </Wrapr>
+        )
+    };
+
 }
 
-export default Radium(App);
+export default withClass(App, classes.App);

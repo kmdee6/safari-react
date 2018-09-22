@@ -19,6 +19,7 @@ const cockpit = (props) => {
         <div className={classes.Cockpit}>
             <p className={assignedClasses.join(' ')}>This is the text.</p>
             <button className={buttonClass} onClick={props.clicked}>Toggle Persons</button>
+            <button className={buttonClass} onClick={props.login}>Authenticate</button>
         </div>
     );
 }

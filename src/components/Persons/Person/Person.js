@@ -1,22 +1,43 @@
-import React from 'react';
+import React, {Component} from 'react';
 import classes from './Person.css';
-import Radium from 'radium';
+import PropTypes from 'prop-types';
+import withClass from '../../../hoc/withClass';
+import Wrapr from "../../../hoc/Wrapr";
+import { AuthContext } from "../../../containers/App";
 
-const person = (props) => {
+class Person extends Component {
 
-    const personStyle = {
-      '@media (min-width:500px)': {
-          width: '70%',
-          height: '130px'
-      }
-    };
+    constructor(props) {
+        super(props);
+        this.inputElement = React.createRef();
+    }
 
-    return (
-        <div className={classes.Person} style={personStyle}>
-            <h1 onClick={props.click}>My name is {props.name} and I'm {props.age} years old.</h1>
-            <input type="text" onChange={props.changed} value={props.name}/>
-        </div>
-    )
-};
+    componentDidMount() {
+        console.log('[Person] Inside componentDidMount');
+        if (this.props.ind === 0) {
+            this.inputElement.current.focus();
+        }
 
-export default Radium(person);
+
+    }
+
+    render() {
+        return (
+            <Wrapr>
+                <AuthContext.Consumer>{(authenticated) => authenticated ? <p>I'm authenticated!</p> : null }</AuthContext.Consumer>
+                <h1 onClick={this.props.click}>My name is {this.props.name} and I'm {this.props.age} years old.</h1>
+                <input ref={this.inputElement} type="text" onChange={this.props.changed} value={this.props.name}/>
+            </Wrapr>
+        );
+    }
+}
+
+Person.propTypes = {
+    click: PropTypes.func,
+    name: PropTypes.string,
+    age: PropTypes.number,
+    changed: PropTypes.func
+
+}
+
+export default withClass(Person, classes.Person);

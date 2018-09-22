@@ -11,3 +11,10 @@
         background-color: lightcyan;
     }
 }
+
+@media (max-width: 500px) {
+    .Person {
+        width: 70%;
+        height: 130px;
+    }
+}
